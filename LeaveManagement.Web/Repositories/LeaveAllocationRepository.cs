@@ -28,14 +28,14 @@ namespace LeaveManagement.Web.Repositories
 
         public async Task<bool> AllocationExists(string employeeId, int leaveTypeId, int period)
         {
-            return await context.LeaveAllocatuons.AnyAsync(q => q.EmployeeId == employeeId 
+            return await context.LeaveAllocations.AnyAsync(q => q.EmployeeId == employeeId 
                                                                 && q.LeaveTypeId == leaveTypeId
                                                                 && q.Period == period);
         }
 
         public async Task<EmployeeAllocationViewModel> GetEmployeeAllocations(string employeeId)
         {
-            var allocations = await context.LeaveAllocatuons
+            var allocations = await context.LeaveAllocations
                 .Include(q => q.LeaveType)
                 .Where(q => q.EmployeeId == employeeId).ToListAsync();
 
@@ -47,7 +47,7 @@ namespace LeaveManagement.Web.Repositories
 
         public async Task<LeaveAllocationEditViewModel> GetEmployeeAllocation(int id)
         {
-            var allocation = await context.LeaveAllocatuons
+            var allocation = await context.LeaveAllocations
                 .Include(q => q.LeaveType)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
@@ -99,6 +99,11 @@ namespace LeaveManagement.Web.Repositories
             await UpdateAsync(leaveAllocation);
 
             return true;
+        }
+
+        public async Task<LeaveAllocation?> GetEmployeeAllocation(string employeeId, int leaveTypeId)
+        {
+           return await context.LeaveAllocations.FirstOrDefaultAsync(q => q.EmployeeId == employeeId && q.LeaveTypeId == leaveTypeId);
         }
     }
 }
