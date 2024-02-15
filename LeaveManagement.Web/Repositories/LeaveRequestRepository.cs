@@ -44,13 +44,13 @@ namespace LeaveManagement.Web.Repositories
             if (approved)
             {
                 var allocation = await leaveAllocationRepository.GetEmployeeAllocation(leaveRequest.RequestingEmployeeId, leaveRequest.LeaveTypeId);
-                int daysRequested = (int)(leaveRequest.EndDate - leaveRequest.StartDate).TotalDays; 
+                int daysRequested = (int)(leaveRequest.EndDate - leaveRequest.StartDate).TotalDays;
                 allocation.NumberofDays -= daysRequested;
 
                 await leaveAllocationRepository.UpdateAsync(allocation);
             }
             await UpdateAsync(leaveRequest);
-            
+
         }
 
         public async Task<bool> CreateLeaveRequest(LeaveRequestCreateViewModel model)
@@ -58,13 +58,13 @@ namespace LeaveManagement.Web.Repositories
             var user = await userManager.GetUserAsync(httpContextAccessor?.HttpContext?.User);
 
             var leaveAllocation = await leaveAllocationRepository.GetEmployeeAllocation(user.Id, model.LeaveTypeId);
-            if(leaveAllocation == null)
+            if (leaveAllocation == null)
             {
                 return false;
             }
 
             int daysRequested = (int)(model.EndDate.Value - model.StartDate.Value).TotalDays;
-            if(daysRequested > leaveAllocation.NumberofDays)
+            if (daysRequested > leaveAllocation.NumberofDays)
             {
                 return false;
             }
@@ -91,7 +91,7 @@ namespace LeaveManagement.Web.Repositories
                 LeaveRequests = mapper.Map<List<LeaveRequestViewModel>>(leaveRequests),
             };
 
-            foreach(var leaveRequest in model.LeaveRequests)
+            foreach (var leaveRequest in model.LeaveRequests)
             {
                 leaveRequest.Employee = mapper.Map<EmployeeListViewModel>(await userManager.FindByEmailAsync(leaveRequest.RequestingEmployeeId));
             }
@@ -124,7 +124,7 @@ namespace LeaveManagement.Web.Repositories
         {
             var user = await userManager.GetUserAsync(httpContextAccessor?.HttpContext?.User);
             var allocations = (await leaveAllocationRepository.GetEmployeeAllocations(user.Id)).LeaveAllocation;
-            var requests = mapper.Map<List<LeaveRequestViewModel>>( await GetAllAsync(user.Id));
+            var requests = mapper.Map<List<LeaveRequestViewModel>>(await GetAllAsync(user.Id));
 
             var model = new EmployeeLeaveRequestViewModel(allocations, requests);
             return model;
