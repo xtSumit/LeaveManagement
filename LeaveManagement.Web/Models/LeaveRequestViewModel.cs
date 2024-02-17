@@ -11,7 +11,7 @@ namespace LeaveManagement.Web.Models
         [DataType(DataType.Date)]
         public DateTime DateRequested { get; set; }
 
-        [Display(Name = "Leave Type")]s
+        [Display(Name = "Leave Type")]
         public LeaveTypeViewModel LeaveType { get; set; }
         public string RequestComments { get; set; }
         public bool? Approved { get; set; }
