@@ -34,7 +34,7 @@ namespace LeaveManagement.Web.Controllers
                 Exception exception = exceptionHandlerPathFeature.Error;
                 _logger.LogError(exception, $"Error Encountered By User: {this.User?.Identity?.Name} | Request Id: {requestId}");
             }
-            return View(new ErrorViewModel { RequestId =requestId});
+            return View(new ErrorViewModel { RequestId = requestId});
         }
     }
 }
